@@ -4,7 +4,7 @@ function usage() {
     echo "[x] Usage: `basename $0` [360-wifi-interface] [public-network-interface] [password(optional)] "
     echo "   [360-wifi-interface]: the network interface of 360-wifi, wlan0 for example."
     echo "   [public-network-interface]: the network interface of public network, eth0 for example."
-    echo "   [password(optional)]: password of your new WIFI network (>=8 bytes).
+    echo "   [password(optional)]: password of your new WIFI network (>=8 bytes). "
     exit
 }
 
