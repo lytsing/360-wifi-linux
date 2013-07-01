@@ -1,16 +1,26 @@
 #!/bin/bash
 
-EXPECTED_ARGS=2
-
 function usage() {
-    echo "[x] Usage: `basename $0` [360-wifi-interface] [public-network-interface] "
+    echo "[x] Usage: `basename $0` [360-wifi-interface] [public-network-interface] [password] "
     echo "   [360-wifi-interface]: the network interface of 360-wifi, wlan0 for example."
     echo "   [public-network-interface]: the network interface for public network, eth0 for example."
     exit
 }
 
-if [ $# -ne $EXPECTED_ARGS ]; then
+
+if [ $# -lt 2 ] || [ $# -gt 3 ] ; then
     usage
+fi
+
+key=$(echo $RANDOM)$(echo $RANDOM)
+
+if [ $# -eq 3 ]; then
+    key=$3
+fi
+
+if [ ${#key} -lt 8 ]; then
+    echo "[x] The length of password can not be less than 8."
+    exit
 fi
 
 
@@ -70,7 +80,7 @@ subnet 10.1.1.0 netmask 255.255.255.0 {
     default-lease-time 600;
     max-lease-time 7200;
 }" | sudo tee  /etc/dhcp/dhcpd.$in_interface.conf > /dev/null
-sudo ifconfig  wlan1 10.1.1.1 up
+sudo ifconfig $in_interface 10.1.1.1 up
 sudo dhcpd -q -cf /etc/dhcp/dhcpd.$in_interface.conf -pf /var/run/dhcp-server/dhcpd.pid  $in_interface
 
 
@@ -90,8 +100,6 @@ sudo iptables -A FORWARD -d 10.1.1.0/24 -m conntrack --ctstate ESTABLISHED,RELAT
 echo "[*] Setting hostapd ... "
 
 ssid=360_FREE_WIFI$RANDOM
-key=$(echo $RANDOM)$(echo $RANDOM)
-# echo $key
 
 echo
 echo "****  SSID : $ssid, key: $key. Enjoy! ****"
