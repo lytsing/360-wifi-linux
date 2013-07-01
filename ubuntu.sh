@@ -1,9 +1,10 @@
 #!/bin/bash
 
 function usage() {
-    echo "[x] Usage: `basename $0` [360-wifi-interface] [public-network-interface] [password] "
+    echo "[x] Usage: `basename $0` [360-wifi-interface] [public-network-interface] [password(optional)] "
     echo "   [360-wifi-interface]: the network interface of 360-wifi, wlan0 for example."
-    echo "   [public-network-interface]: the network interface for public network, eth0 for example."
+    echo "   [public-network-interface]: the network interface of public network, eth0 for example."
+    echo "   [password(optional)]: password of your new WIFI network (>=8 bytes).
     exit
 }
 
@@ -87,7 +88,7 @@ sudo dhcpd -q -cf /etc/dhcp/dhcpd.$in_interface.conf -pf /var/run/dhcp-server/dh
 echo "[*] Setting iptable ... "
 forward=$(cat  /proc/sys/net/ipv4/ip_forward)
 if [ $forward -eq "0" ]; then
-    echo "    -->[*] Enableing ipv4 forwarding"
+    echo "    -->[*] Enabling ipv4 forwarding"
     echo 1  | sudo tee  /proc/sys/net/ipv4/ip_forward
 fi
 echo "    -->[*] Setting iptables rules"
@@ -105,7 +106,7 @@ echo
 echo "****  SSID : $ssid, key: $key. Enjoy! ****"
 echo
 function clean_up {
-    echo "[*] Clealing up ..."
+    echo "[*] Cleaning up ..."
     if [ -f /var/run/dhcp-server/dhcpd.pid ]; then
         dhcpd_pid=$(cat /var/run/dhcp-server/dhcpd.pid)
         sudo kill -9 $dhcpd_pid > /dev/null
