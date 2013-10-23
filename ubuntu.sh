@@ -86,7 +86,7 @@ case ${ip_prefix} in
         echo '!are you sure you have connected to internet'
         ;;
     *)
-        echo '!!!some miracle'
+        ip_prefix="10.0"
         ;;
 esac
 subnet="${ip_prefix}.9"
