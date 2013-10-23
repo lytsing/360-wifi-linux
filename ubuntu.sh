@@ -71,17 +71,18 @@ if [ -f /etc/dhcp/dhcpd.$in_interface.conf ]; then
     sudo rm /etc/dhcp/dhcpd.$in_interface.conf
 fi
 
+subnet=192.168.9
 echo "default-lease-time 600;
 max-lease-time 7200;
 log-facility local7;
-subnet 10.1.1.0 netmask 255.255.255.0 {
-    range 10.1.1.100 10.1.1.200;
+subnet ${subnet}.0 netmask 255.255.255.0 {
+    range ${subnet}.100 ${subnet}.200;
     option domain-name-servers 8.8.8.8;
-    option routers 10.1.1.1;
+    option routers ${subnet}.1;
     default-lease-time 600;
     max-lease-time 7200;
 }" | sudo tee  /etc/dhcp/dhcpd.$in_interface.conf > /dev/null
-sudo ifconfig $in_interface 10.1.1.1 up
+sudo ifconfig $in_interface ${subnet}.1 up
 sudo dhcpd -q -cf /etc/dhcp/dhcpd.$in_interface.conf -pf /var/run/dhcp-server/dhcpd.pid  $in_interface
 
 
@@ -94,9 +95,9 @@ fi
 echo "    -->[*] Setting iptables rules"
 sudo iptables -F
 sudo iptables -t nat -F
-sudo iptables -t nat -A POSTROUTING -s 10.1.1.0/24 -o $out_interface -j MASQUERADE
-sudo iptables -A FORWARD -s 10.1.1.0/24 -o $out_interface -j ACCEPT
-sudo iptables -A FORWARD -d 10.1.1.0/24 -m conntrack --ctstate ESTABLISHED,RELATED -i $out_interface -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -s ${subnet}.0/24 -o $out_interface -j MASQUERADE
+sudo iptables -A FORWARD -s ${subnet}.0/24 -o $out_interface -j ACCEPT
+sudo iptables -A FORWARD -d ${subnet}.0/24 -m conntrack --ctstate ESTABLISHED,RELATED -i $out_interface -j ACCEPT
 
 echo "[*] Setting hostapd ... "
 
