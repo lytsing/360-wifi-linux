@@ -72,7 +72,6 @@ if [ -f /etc/dhcp/dhcpd.$in_interface.conf ]; then
 fi
 
 ip_prefix=`ifconfig ${out_interface} | grep "inet addr" | awk -F: '{print $2}' | awk -F. '{print $1}'`
-echo ${ip_prefix}
 case ${ip_prefix} in
     "10")
         ip_prefix="172.16"
