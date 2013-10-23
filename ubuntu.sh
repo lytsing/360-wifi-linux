@@ -71,7 +71,26 @@ if [ -f /etc/dhcp/dhcpd.$in_interface.conf ]; then
     sudo rm /etc/dhcp/dhcpd.$in_interface.conf
 fi
 
-subnet=192.168.9
+ip_prefix=`ifconfig ${out_interface} | grep "inet addr" | awk -F: '{print $2}' | awk -F. '{print $1}'`
+echo ${ip_prefix}
+case ${ip_prefix} in
+    "10")
+        ip_prefix="172.16"
+        ;;
+    "172")
+        ip_prefix="192.168"
+        ;;
+    "192")
+        ip_prefix="10.0"
+        ;;
+    "")
+        echo '!are you sure you have connected to internet'
+        ;;
+    *)
+        echo '!!!some miracle'
+        ;;
+esac
+subnet="${ip_prefix}.9"
 echo "default-lease-time 600;
 max-lease-time 7200;
 log-facility local7;
