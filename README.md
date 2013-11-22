@@ -3,11 +3,13 @@
 
 Setting [360 Mobile WIFI](http://wifi.360.cn/) on Linux
 
-Notes: this just works on 360 wifi 1 version, 360 wifi 2 can't use, type: `iw list` , fuck, no response. you can use `lsusb` command to see your devices type:
+*Notes* this just works on 360 wifi version 1, 360 wifi 2 can't use, type: `iw list` , fuck, no response. you can use `lsusb` command to see your devices type:
 
+* ID 148f:5370 Ralink Technology, Corp.
 * ID 148f:7601 Ralink Technology, Corp. 
 * ID 148f:760b Ralink Technology, Corp. 
 
+The first line is version 1, other is version 2, they need to install driver, see [360 wifi 2 做无线网卡(Linux)](http://blog.lytsing.org/archives/954.html)
 
 (1) It has been tested on fedora 16 (kernel version < 3.6.11).
 
