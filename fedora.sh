@@ -8,6 +8,11 @@ function usage() {
     exit
 }
 
+function is_installed() {
+    PACKAGE_NAME=$1
+    [[ $( rpm -qa $PACKAGE_NAME ) =~ ${PACKAGE_NAME} ]]
+}
+
 
 if [ $# -lt 2 ] || [ $# -gt 3 ] ; then
     usage
@@ -59,7 +64,7 @@ fi
 PACKAGE_NAME=hostapd
 echo "[*] Installing necessary packages ... "
 echo "    -->[a] $PACKAGE_NAME"
-if [[ $( rpm -qa $PACKAGE_NAME ) =~ ${PACKAGE_NAME} ]]
+if is_installed $PACKAGE_NAME
 then
     echo " Package $PACKAGE_NAME is installed."
 else
@@ -68,7 +73,7 @@ fi
 
 PACKAGE_NAME=dhcp
 echo "    -->[b] $PACKAGE_NAME"
-if [[ $( rpm -qa $PACKAGE_NAME ) =~ ${PACKAGE_NAME} ]]
+if is_installed $PACKAGE_NAME
 then
     echo " Package $PACKAGE_NAME is installed."
 else
