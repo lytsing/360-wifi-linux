@@ -3,7 +3,7 @@
 
 Setting 360 Mobile WIFI (http://wifi.360.cn/) on Linux
 
-(1) It has been tested on ubuntu 12.04 (kernel version < 3.4.0).
+(1) It has been tested on fedora 16 (kernel version < 3.6.11).
 
 (2) Linux has a bug of USB 3.0 driver (dmesg | grep "ERROR no room on ep ring"). If it does not work on USB 3.0 slots, you can try the following workaround:
 

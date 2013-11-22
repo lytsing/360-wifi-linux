@@ -34,7 +34,7 @@ WIFI_HOME=~/.360wifi
 #[1] Check whether we have 360 wifi inserted
 
 echo "[*] Checking 360-wifi ... "
-result=$(lsusb | grep -e "148f:7601 Ralink Technology")
+result=$(lsusb | grep -e "148f:5370 Ralink Technology")
 
 if [ $? -ne 0 ]; then
     echo "[x] Please insert 360-wifi into the USB interface"
@@ -55,18 +55,28 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
-
 # [3] install necessary packages
+PACKAGE_NAME=hostapd
 echo "[*] Installing necessary packages ... "
-echo "    -->[a] hostapd"
-sudo apt-get install -y hostapd 
+echo "    -->[a] $PACKAGE_NAME"
+if [[ $( rpm -qa $PACKAGE_NAME ) =~ ${PACKAGE_NAME} ]]
+then
+    echo " Package $PACKAGE_NAME is installed."
+else
+    sudo yum install -y hostapd 
+fi
 
-echo "    -->[b] isc-dhcp-server"
-sudo apt-get install -y isc-dhcp-server 
+PACKAGE_NAME=dhcp
+echo "    -->[b] $PACKAGE_NAME"
+if [[ $( rpm -qa $PACKAGE_NAME ) =~ ${PACKAGE_NAME} ]]
+then
+    echo " Package $PACKAGE_NAME is installed."
+else
+    sudo yum install -y dhcp 
+fi
 
-
-# [4] set isc-dhcp-server
-echo "[*] Setting isc-dhcp-server ... "
+# [4] set dhcp
+echo "[*] Setting dhcp ... "
 if [ -f /etc/dhcp/dhcpd.$in_interface.conf ]; then
     sudo rm /etc/dhcp/dhcpd.$in_interface.conf
 fi
